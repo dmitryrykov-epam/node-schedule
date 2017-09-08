@@ -8,6 +8,6 @@
         ],
         "outDir": "./lib",
         "module": "commonjs",
-        "removeComments": true
+        "removeComments": false
     }
 }

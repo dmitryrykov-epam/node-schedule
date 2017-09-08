@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /// <reference path="./typings.d.ts" />
 
 import * as express from 'express';
