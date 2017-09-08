@@ -5,7 +5,10 @@ import * as express from 'express';
 import { readFile } from 'fs';
 import * as path from 'path';
 
-const app = express();
+const app = express()
+    .set('protocol', 'http')
+    .set('domain', 'localhost')
+    .set('port', 3000);
 
 const files = [
     {
@@ -31,6 +34,18 @@ const buildRouter = ({timeSlots, schedule}: ScheduleRequestAnswer) => {
     return router;
 };
 
+const showInfo = (app: express.Application) => {
+    const basePath = `${app.get('protocol')}://${app.get('domain')}:${app.get('port')}`;
+
+    return `Server started at ${basePath}
+
+    Available routes:
+        ${basePath}/list - List of all available universities
+        ${basePath}/<university_name>/list - List of all available groups at university
+        ${basePath}/<university_name>/<group_id> - Schedule
+    `;
+};
+
 const promises = files.map(({name, path, alias}) => {
     return new Promise((resolve, reject) => {
         readFile(path, (err, json) => {
@@ -53,5 +68,5 @@ const promises = files.map(({name, path, alias}) => {
 Promise.all(promises)
     .then(() => app.get('/list', (_, res) => res.json(universities).end()))
     .then(() => app.all('**', (_, res) => res.status(404).json("Not found").end()))
-    .then(() => app.listen(3000, 'localhost', () => console.log("Server started")))
+    .then(() => app.listen(app.get('port'), app.get('domain'), () => console.log(showInfo(app))))
     .catch(error => console.error("Can't start server", error));
