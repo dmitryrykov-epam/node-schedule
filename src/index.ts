@@ -4,10 +4,11 @@
 import * as express from 'express';
 import { readFile } from 'fs';
 import * as path from 'path';
+import * as ip from 'ip';
 
 const app = express()
     .set('protocol', 'http')
-    .set('domain', 'localhost')
+    .set('domain', ip.address())
     .set('port', 3000);
 
 const files = [
