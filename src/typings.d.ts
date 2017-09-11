@@ -35,7 +35,7 @@ interface TimeSlot {
  * Массив занятий в день. Индекс 0 содержит первое занаятие, 1 -> второе, и так далее
  * Значение `null` показывает, что занятия нет
  */
-type DaySchedule = Array<TimeSlot>;
+type DaySchedule = TimeSlot[];
 
 /**
  * Список занятий по дням.

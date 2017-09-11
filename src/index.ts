@@ -26,8 +26,28 @@ const buildRouter = ({timeSlots, schedule}: ScheduleRequestAnswer) => {
     
     router.get('/list', (_, res) => res.json(groups).end());
 
-    const buildGroupEndpoint = (group: string) => router
-        .get(`/${group}`, (_, res) => res.json({ timeSlots, schedule: schedule[group] }).end());
+    const buildGroupEndpoint = (group: string) => {
+        const scheduleObject = {
+            numerator: schedule[group].map(day => day.map(slot => slot ? slot.denominator : null)),
+            denominator: schedule[group].map(day => day.map(slot => slot ? slot.denominator : null)),
+        };
+        const lectorsList = [...scheduleObject.numerator, ...scheduleObject.denominator]
+            .reduce((acc, next) => [...acc, ...next], [])
+            .filter(lesson => lesson)
+            .map(lesson => lesson.lector)
+            .reduce((acc, next) => [...acc, ...next], [])
+            .reduce((acc, next) => acc.indexOf(next) > -1 ? acc : [...acc, next], []);
+        const lessonsList = [...scheduleObject.numerator, ...scheduleObject.denominator]
+            .reduce((acc, next) => [...acc, ...next], [])
+            .filter(lesson => lesson)
+            .map(lesson => lesson.name)
+            .reduce((acc, next) => acc.indexOf(next) > -1 ? acc : [...acc, next], []);
+            
+        router.get(
+            `/${group}`,
+            (_, res) => res.json({ timeSlots, schedule: scheduleObject, lectorsList, lessonsList }).end(),
+        );
+    }
 
     groups.map(buildGroupEndpoint);
 
