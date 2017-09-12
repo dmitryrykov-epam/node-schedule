@@ -56,14 +56,12 @@ const buildRouter = ({timeSlots, schedule}: ScheduleRequestAnswer) => {
 };
 
 const showInfo = (app: express.Application) => {
-    const basePath = `${app.get('protocol')}://${app.get('domain')}:${app.get('port')}`;
-
-    return `Server started at ${basePath}
+    return `Server started
 
     Available routes:
-        ${basePath}/list - List of all available universities
-        ${basePath}/<university_name>/list - List of all available groups at university
-        ${basePath}/<university_name>/<group_id> - Schedule
+        /list - List of all available universities
+        /<university_name>/list - List of all available groups at university
+        /<university_name>/<group_id> - Schedule
     `;
 };
 
@@ -89,5 +87,5 @@ const promises = files.map(({name, path, alias}) => {
 Promise.all(promises)
     .then(() => app.get('/list', (_, res) => res.json(universities).end()))
     .then(() => app.all('**', (_, res) => res.status(404).json("Not found").end()))
-    .then(() => app.listen(app.get('port'), app.get('domain'), () => console.log(showInfo(app))))
+    .then(() => app.listen(80, app.get('domain'), () => console.log(showInfo(app))))
     .catch(error => console.error("Can't start server", error));
