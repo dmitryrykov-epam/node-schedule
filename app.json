@@ -1,0 +1,7 @@
+{
+    "name": "Universities Schedule Node.js",
+    "description": "Server for React Native education task",
+    "repository": "https://github.com/dmitryrykov-epam/node-schedule-epm-task",
+    "logo": "https://node-js-sample.herokuapp.com/node.png",
+    "keywords": ["node", "express", "json"]
+  }
