@@ -6,10 +6,9 @@ import { readFile } from 'fs';
 import * as path from 'path';
 import * as ip from 'ip';
 
-const app = express()
-    .set('protocol', 'http')
-    .set('domain', ip.address())
-    .set('port', 3000);
+var port = +process.env.PORT || 8080;
+
+const app = express();
 
 const files = [
     {
@@ -87,5 +86,5 @@ const promises = files.map(({name, path, alias}) => {
 Promise.all(promises)
     .then(() => app.get('/list', (_, res) => res.json(universities).end()))
     .then(() => app.all('**', (_, res) => res.status(404).json("Not found").end()))
-    .then(() => app.listen(80, app.get('domain'), () => console.log(showInfo(app))))
+    .then(() => app.listen(port, app.get('domain'), () => console.log(showInfo(app))))
     .catch(error => console.error("Can't start server", error));
