@@ -28,7 +28,7 @@ const buildRouter = ({timeSlots, schedule}: ScheduleRequestAnswer) => {
 
     const buildGroupEndpoint = (group: string) => {
         const scheduleObject = {
-            numerator: schedule[group].map(day => day.map(slot => slot ? slot.denominator : null)),
+            numerator: schedule[group].map(day => day.map(slot => slot ? slot.numerator : null)),
             denominator: schedule[group].map(day => day.map(slot => slot ? slot.denominator : null)),
         };
         const lectorsList = [...scheduleObject.numerator, ...scheduleObject.denominator]
